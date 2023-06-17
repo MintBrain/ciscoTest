@@ -1,0 +1,26 @@
+body {
+    text-align: center;
+    font-size: large;
+}
+
+.opt-cont {
+    text-align: center;
+}
+
+.options {
+    display: inline-block;
+    text-align: left;
+    margin: 10px;
+}
+
+input {
+    margin: 10px;
+}
+
+.right {
+    background-color: #a4ffa4;
+}
+
+.wrong {
+    background-color: #ffd9ba;
+}
