@@ -11,7 +11,7 @@ const randButton = document.body.querySelector(".random");
 
 let data = [...qData];
 
-let curQ = 16;
+let curQ = 0;
 
 const setQuestion = (question, answers, correctAnswers) => {
   document.querySelector(".image").innerHTML = "";
