@@ -29,6 +29,9 @@ input {
 .question {
     font-size: 25px;
     margin-bottom: auto;
+    display: inline-block;
+    max-width: 80%;
+    margin-top: auto;
 }
 
 button {
@@ -37,4 +40,14 @@ button {
 
 img {
     height: auto;
+}
+
+.text {
+    width: 200px;
+    height: 30px;
+    text-align: center;   
+}
+
+.inpDiv {
+    margin: inherit;
 }
