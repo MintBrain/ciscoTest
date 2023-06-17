@@ -79,8 +79,10 @@ const prevHandler = (evt) => {
     evt.preventDefault();
     if (curQ === 0) {
         curQ = data.length - 1;
+    } else {
+        curQ -= 1;
     }
-    curQ -= 1;
+    
     setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
 };
 
@@ -88,8 +90,9 @@ const nextHandler = (evt) => {
     evt.preventDefault();
     if (curQ === data.length - 1) {
         curQ = 0
+    } else {
+        curQ += 1;
     }
-    curQ += 1;
     setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
 };
 
