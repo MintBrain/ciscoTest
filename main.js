@@ -1,16 +1,33 @@
+import { qData } from './data.js';
+
 const questionContainer = document.body.querySelector('.question');
 const optionsContainer = document.body.querySelector('.options');
 const submitButton = document.body.querySelector('.check');
+const showButton = document.body.querySelector('.show');
+const previousButton = document.body.querySelector('.previous');
 const nextButton = document.body.querySelector('.next');
 const resetButton = document.body.querySelector('.reset');
+const randButton = document.body.querySelector('.random');
 const corA = document.body.querySelector('.corA');
 
-const qs = [['Компания обдумывает, использовать ли клиент/сервер или одноранговую сеть. Каковы три характеристики одноранговой сети? (Выберите три.)', ['масштабируемая', 'отсутствует централизованное администрирование', 'легко создать', 'лучшая производительность устройства при работе в качестве клиента и сервера', 'меньше затрат на внедрение', 'лучшая безопасность'], [1, 2, 4]], ['Пользователь реализует безопасность в сети небольшого офиса. Какие два действия обеспечат минимальные требования безопасности для этой сети? (Выберите два.)', ['установка беспроводной сети', 'установка антивирусного программного обеспечения', 'внедрение системы обнаружения вторжений', 'внедрение брандмауэра', 'добавление специального устройства предотвращения вторжений'], [1, 3]], ['Какие два варианта подключения к Интернету не требуют прокладки физических кабелей к зданию? (Выберите два.)', ['спутниковый канал', 'выделенная телефонная линия', 'Коммутируемая телефонная линия', 'Сотовая связь', 'DSL'], [0, 3]], ['Какое утверждение описывает использование сетевой технологии Powerline?', ['Новые «умные» электрические кабели используются для расширения существующей домашней локальной сети.', 'Домашняя локальная сеть устанавливается без использования физических кабелей.', 'Точки беспроводного доступа используют адаптеры Powerline для распространения данных через домашнюю локальную сеть.', 'Устройство подключается к существующей домашней локальной сети с помощью адаптера и существующей электрической проводки.'], [3]], ['Какую область сети ИТ-персоналу колледжа, скорее всего, придется перепроектировать в результате того, что многие учащиеся приносят в школу свои планшеты и смартфоны для доступа к школьным ресурсам?', ['Беспроводная сеть', 'интранет', 'экстранет', 'проводная локальная сеть', 'беспроводная глобальная сеть'], [0]], ['Каковы две функции конечных устройств в сети? (Выберите два.)', ['Они являются интерфейсом между людьми и коммуникационной сетью.', 'Они направляют данные по альтернативным путям в случае сбоев соединения.', 'Они фильтруют поток данных для повышения безопасности.', 'Они обеспечивают канал, по которому передается сетевое сообщение.', 'Они создают данные, которые передаются через сеть.'], [0, 4]], ['Что такое Интернет?', ['Это сеть, основанная на технологии Ethernet.', 'Он обеспечивает доступ к сети для мобильных устройств.', 'Он обеспечивает соединения через взаимосвязанные глобальные сети.', 'Это частная сеть для организации с соединениями LAN и WAN.'], [2]], ['Сотрудник в филиале составляет предложение для клиента. Для этого сотруднику необходимо получить доступ к конфиденциальной информации о ценах с внутренних серверов в головном офисе. К какой сети будет иметь доступ сотрудник?', ['Internet', 'Intranet', 'Extranet', 'Local Network'], [2]], ['Какое устройство выполняет функцию определения пути, по которому сообщения должны проходить через объединенные сети?', ['маршрутизатор', 'DSL-модем', 'веб-сервер', 'брандмауэр'], [0]], ['Какой термин описывает состояние сети, когда спрос на сетевые ресурсы превышает доступную мощность?', ['конвергенция', 'оптимизация', 'перегрузка', 'синхронизация'], [2]], ['Какое выражение точно определяет термин bandwidth?', ['набор методов для управления использованием сетевых ресурсов', 'метод ограничения воздействия аппаратного или программного сбоя на сеть', 'состояние, когда спрос на сетевые ресурсы превышает доступные ресурсы', 'мера пропускной способности среды передачи данных'], [3]], ['Какая сеть способна передавать голос, видео, текст и графику по одним и тем же каналам связи.', ['Local', 'Campus', 'Extranet', 'Converged'], [3]], ['Какие два критерия используются для выбора сетевой среды из различных сетевых сред? (Выберите два.)', ['расстояние, на которое выбранная среда может успешно передавать сигнал', 'стоимость конечных устройств, используемых в сети', 'количество промежуточных устройств, установленных в сети', 'Оборудование, в которое будет установлена выбранная среда', 'типы данных, которые должны быть приоритетными'], [0, 3]], ['Какое утверждение описывает характеристику облачных вычислений?', ['Приложения могут быть доступны через Интернет отдельными пользователями или предприятиями с любого устройства в любой точке мира.', 'Бизнес может напрямую подключаться к Интернету без использования интернет-провайдера.', 'Устройства могут подключаться к Интернету через существующую электропроводку.', 'Для доступа к облаку требуются инвестиции в новую инфраструктуру.'], [0]], ['Какие два утверждения описывают промежуточные устройства? (Выберите два.)', ['Промежуточные устройства изменяют содержимое данных.', 'Промежуточные устройства соединяют отдельные хосты с сетью.', 'Промежуточные устройства генерируют содержимое данных.', 'Промежуточные устройства инициируют процесс инкапсуляции.', 'Промежуточные устройства определяют путь передачи данных.'], [3, 4]], ['Сетевой администратор реализует политику, требующую надежных и сложных паролей. Какую цель защиты данных поддерживает эта политика?', ['целостность данных', 'избыточность данных', 'конфиденциальность данных', 'Качество данных'], [2]], ['<p dir="ltr" style="text-align: left;"></p><h4 align="left">\nАббревиатура\n___ относится к политике, которая позволяет\nсотрудникам использовать свои личные\nустройства в офисе для доступа к сети\nи другим ресурсам.</h4><br><p></p>', ['BYOD'], [0]], ['К какой сети должен иметь доступ домашний пользователь, чтобы совершать покупки в Интернете?', ['интранет', 'интернет', 'локальная сеть', 'экстранет'], [1]], ['Какие два варианта подключения обеспечивают постоянное подключение к Интернету с высокой пропускной способностью для компьютеров в домашнем офисе? (Выберите два.)', ['спутниковый канал', 'кабель', 'коммутируемая телефонная линия', 'DSL', 'Сотовая связь'], [1, 3]], ['Какой тип сетевого трафика требует QoS?', ['он-лайн покупка', 'видео-конференция', 'Эл. почта', 'wiki'], [1]], ['Какое нарушение безопасности нанесет наибольший ущерб жизни домашнего пользователя?', ['отказ в обслуживании вашего почтового сервера', 'захват личных данных, который приводит к краже личных данных', 'шпионское ПО, которое приводит к спаму по электронной почте', 'размножение червей и вирусов на вашем компьютере'], [1]]];
+let data = [...qData];
+
 let curQ = 0;
 
 const setQuestion = (question, answers, correctAnswers) => {
     corA.hidden = true;
-    questionContainer.textContent = question;
+    document.querySelector('.image').innerHTML = '';
+    if (question.startsWith('TEMP=')) {
+        let pic = question.slice(6, question.indexOf('\"', 7))
+        questionContainer.textContent = question.slice(question.indexOf('\"', 7)+1);
+        let pic2 = document.createElement('img');
+        pic2.src = `./pics/${pic}`;
+        document.querySelector('.image').insertAdjacentElement('beforeend', pic2);
+    } else {
+        questionContainer.textContent = question;
+    }
+   
+
     optionsContainer.innerHTML = '';
     let type = 'checkbox';
     if (correctAnswers.length === 1) {
@@ -45,11 +62,12 @@ const setQuestion = (question, answers, correctAnswers) => {
 
 const submitHandler = (evt) => {
     evt.preventDefault();
-    const rAns = qs[curQ][1].filter((ans, i) => qs[curQ][2].includes(i));
+    const rAns = data[curQ][1].filter((ans, i) => data[curQ][2].includes(i));
     optionsContainer.querySelectorAll('div').forEach((d) => {
+        d.querySelector('span').classList = '';
         if (rAns.includes(d.querySelector('span').textContent) && d.querySelector('input').checked) {
             d.querySelector('span').classList.add('right');
-        } else if (rAns.includes(d.querySelector('span').textContent) && !d.querySelector('input').checked) {
+        } else if (!rAns.includes(d.querySelector('span').textContent) && d.querySelector('input').checked) {
             d.querySelector('span').classList.add('wrong');
         }
         
@@ -57,22 +75,76 @@ const submitHandler = (evt) => {
     corA.hidden = false;
 };
 
+const prevHandler = (evt) => {
+    evt.preventDefault();
+    if (curQ === 0) {
+        curQ = data.length - 1;
+    }
+    curQ -= 1;
+    setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
+};
+
 const nextHandler = (evt) => {
     evt.preventDefault();
+    if (curQ === data.length - 1) {
+        curQ = 0
+    }
     curQ += 1;
-    setQuestion(qs[curQ][0], qs[curQ][1], qs[curQ][2]);
+    setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
 };
 
 const resetClick = (evt) => {
     evt.preventDefault();
     curQ = 0;
-    setQuestion(qs[curQ][0], qs[curQ][1], qs[curQ][2]);
+    data = [...qData];
+    setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
 };
 
-setQuestion(qs[curQ][0], qs[curQ][1], qs[curQ][2])
+const showClick = (evt) => {
+    evt.preventDefault();
+    const rAns = data[curQ][1].filter((ans, i) => data[curQ][2].includes(i));
+    optionsContainer.querySelectorAll('div').forEach((d) => {
+        d.querySelector('span').classList = '';
+        if (rAns.includes(d.querySelector('span').textContent)) {
+            d.querySelector('input').checked = true;
+            d.querySelector('span').classList.add('right');
+        } else if (!rAns.includes(d.querySelector('span').textContent)) {
+            d.querySelector('input').checked = false;
+        }
+        
+    });
+}
+
+const onOptClick = (evt) => {
+    if (evt.target.tagName === 'SPAN') {
+        evt.preventDefault();
+        evt.target.previousElementSibling.checked = !evt.target.previousElementSibling.checked;
+    }
+    
+
+};
+
+function ShuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+const randHandler = (evt) => {
+    evt.preventDefault();
+    data = ShuffleArray(data);
+    curQ = 0;
+    setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
+};
+
+setQuestion(data[curQ][0], data[curQ][1], data[curQ][2])
 
 submitButton.addEventListener('click', submitHandler);
+previousButton.addEventListener('click', prevHandler);
 nextButton.addEventListener('click', nextHandler);
 resetButton.addEventListener('click', resetClick);
-
-
+showButton.addEventListener('click', showClick);
+optionsContainer.addEventListener('click',onOptClick);
+randButton.addEventListener('click', randHandler);

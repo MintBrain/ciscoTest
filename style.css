@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    font-size: large;
+    font-size: 20px;
 }
 
 .opt-cont {
@@ -11,6 +11,7 @@ body {
     display: inline-block;
     text-align: left;
     margin: 10px;
+    font-size: 22px;
 }
 
 input {
@@ -23,4 +24,17 @@ input {
 
 .wrong {
     background-color: #ffd9ba;
+}
+
+.question {
+    font-size: 25px;
+    margin-bottom: auto;
+}
+
+button {
+    font-size: 20px;
+}
+
+img {
+    height: auto;
 }
