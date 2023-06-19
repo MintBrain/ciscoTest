@@ -602,7 +602,7 @@ export const qData = [
       "1 – перекрестный(crossover), 2 – консольный(rollover), 3 – прямой(straight-through)",
       "1 – консольный(rollover), 2 – перекрестный(crossover), 3 – прямой(straight-through)",
     ],
-    [3],
+    [0],
   ],
   [
     "Какова функция значения CRC, которое находится в поле FCS кадра?",
