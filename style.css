@@ -55,3 +55,11 @@ img {
 pre {
     white-space: pre-wrap;
 }
+
+h2 {
+    margin: auto;
+}
+
+.qdiv {
+    margin: inherit;
+}

@@ -8,10 +8,14 @@ const previousButton = document.body.querySelector(".previous");
 const nextButton = document.body.querySelector(".next");
 const resetButton = document.body.querySelector(".reset");
 const randButton = document.body.querySelector(".random");
+const indexContainer = document.body.querySelector('.index');
 
 let data = [...qData];
-
 let curQ = 0;
+
+const indexUpdate = (index) => {
+  indexContainer.textContent = `${index} / ${data.length}`;
+};
 
 const setQuestion = (question, answers, correctAnswers) => {
   document.querySelector(".image").innerHTML = "";
@@ -66,7 +70,7 @@ const setQuestion = (question, answers, correctAnswers) => {
 
 const submitHandler = (evt) => {
   evt.preventDefault();
-  const rAns = data[curQ][1].filter((ans, i) => data[curQ][2].includes(i));
+  const rAns = data[curQ][2].filter((ans, i) => data[curQ][3].includes(i));
 
   if (optionsContainer.firstChild.firstChild.type === "text") {
     optionsContainer.firstChild.classList = "";
@@ -101,8 +105,8 @@ const prevHandler = (evt) => {
   } else {
     curQ -= 1;
   }
-
-  setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
+  indexUpdate(data[curQ][0]);
+  setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
 
 const nextHandler = (evt) => {
@@ -112,19 +116,21 @@ const nextHandler = (evt) => {
   } else {
     curQ += 1;
   }
-  setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
+  indexUpdate(data[curQ][0]);
+  setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
 
 const resetClick = (evt) => {
   evt.preventDefault();
   curQ = 0;
   data = [...qData];
-  setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
+  indexUpdate(data[curQ][0]);
+  setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
 
 const showClick = (evt) => {
   evt.preventDefault();
-  const rAns = data[curQ][1].filter((ans, i) => data[curQ][2].includes(i));
+  const rAns = data[curQ][2].filter((ans, i) => data[curQ][3].includes(i));
 
   if (optionsContainer.firstChild.firstChild.type === "text") {
     optionsContainer.firstChild.firstChild.value = rAns[0];
@@ -164,10 +170,13 @@ const randHandler = (evt) => {
   evt.preventDefault();
   data = ShuffleArray(data);
   curQ = 0;
-  setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
+  indexUpdate(data[curQ][0]);
+  setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
 
-setQuestion(data[curQ][0], data[curQ][1], data[curQ][2]);
+
+indexUpdate(data[curQ][0]);
+setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 
 submitButton.addEventListener("click", submitHandler);
 previousButton.addEventListener("click", prevHandler);
