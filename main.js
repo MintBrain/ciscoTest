@@ -8,10 +8,12 @@ const previousButton = document.body.querySelector(".previous");
 const nextButton = document.body.querySelector(".next");
 const resetButton = document.body.querySelector(".reset");
 const randButton = document.body.querySelector(".random");
-const indexContainer = document.body.querySelector('.index');
+const indexContainer = document.body.querySelector(".index");
+const againButton = document.body.querySelector(".again");
 
 let data = [...qData];
 let curQ = 0;
+let wrongAnswers = [];
 
 const indexUpdate = (index) => {
   indexContainer.textContent = `${index} / ${data.length}`;
@@ -43,7 +45,7 @@ const setQuestion = (question, answers, correctAnswers) => {
     inputEl.type = "text";
     inputEl.placeholder = "Введи ответ";
     inputEl.name = "cisco";
-    inputEl.classList = 'text'
+    inputEl.classList = "text";
     d.insertAdjacentElement("beforeend", inputEl);
 
     d.insertAdjacentHTML("beforeend", "<br>");
@@ -58,7 +60,7 @@ const setQuestion = (question, answers, correctAnswers) => {
     inputEl.type = type;
     inputEl.value = answer;
     inputEl.name = "cisco";
-    d.classList = 'inpDiv';
+    d.classList = "inpDiv";
     d.insertAdjacentElement("beforeend", inputEl);
     let sp = document.createElement("span");
     sp.textContent = answer;
@@ -68,7 +70,7 @@ const setQuestion = (question, answers, correctAnswers) => {
   }
 };
 
-const submitHandler = (evt) => {
+const checkAnswerHandler = (evt) => {
   evt.preventDefault();
   const rAns = data[curQ][2].filter((ans, i) => data[curQ][3].includes(i));
 
@@ -78,24 +80,28 @@ const submitHandler = (evt) => {
       optionsContainer.firstChild.classList.add("right");
     } else {
       optionsContainer.firstChild.classList.add("wrong");
+      if (!wrongAnswers.includes(data[curQ][0])) {
+        wrongAnswers.push(data[curQ][0]);
+      }
     }
     return;
   }
-
+  let checked = 0;
   optionsContainer.querySelectorAll("div").forEach((d) => {
     d.querySelector("span").classList = "";
-    if (
-      rAns.includes(d.querySelector("span").textContent) &&
-      d.querySelector("input").checked
-    ) {
+    if (rAns.includes(d.querySelector("span").textContent) && d.querySelector("input").checked) {
       d.querySelector("span").classList.add("right");
-    } else if (
-      !rAns.includes(d.querySelector("span").textContent) &&
-      d.querySelector("input").checked
-    ) {
+      checked += 1;
+    } else if (!rAns.includes(d.querySelector("span").textContent) && d.querySelector("input").checked) {
       d.querySelector("span").classList.add("wrong");
+      if (!wrongAnswers.includes(data[curQ][0])) {
+        wrongAnswers.push(data[curQ][0]);
+      }
     }
   });
+  if (checked !== rAns.length && !wrongAnswers.includes(data[curQ][0])) {
+    wrongAnswers.push(data[curQ][0]);
+  }
 };
 
 const prevHandler = (evt) => {
@@ -124,6 +130,7 @@ const resetClick = (evt) => {
   evt.preventDefault();
   curQ = 0;
   data = [...qData];
+  wrongAnswers = [];
   indexUpdate(data[curQ][0]);
   setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
@@ -174,14 +181,25 @@ const randHandler = (evt) => {
   setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
 
+const againClickHandler = (evt) => {
+  evt.preventDefault();
+  if (wrongAnswers.length === 0) {
+    return;
+  }
+  data = data.filter((question) => wrongAnswers.includes(question[0]));
+  curQ = 0;
+  indexUpdate(data[curQ][0]);
+  setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
+};
 
 indexUpdate(data[curQ][0]);
 setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 
-submitButton.addEventListener("click", submitHandler);
+submitButton.addEventListener("click", checkAnswerHandler);
 previousButton.addEventListener("click", prevHandler);
 nextButton.addEventListener("click", nextHandler);
 resetButton.addEventListener("click", resetClick);
 showButton.addEventListener("click", showClick);
 optionsContainer.addEventListener("click", onOptClick);
 randButton.addEventListener("click", randHandler);
+againButton.addEventListener("click", againClickHandler);
