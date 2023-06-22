@@ -63,3 +63,11 @@ h2 {
 .qdiv {
     margin: inherit;
 }
+
+.rCount {
+    background-color: #a4ffa4;
+}
+
+.wCount {
+    background-color: #ffd9ba;
+}
