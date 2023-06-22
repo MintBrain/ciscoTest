@@ -10,10 +10,13 @@ const resetButton = document.body.querySelector(".reset");
 const randButton = document.body.querySelector(".random");
 const indexContainer = document.body.querySelector(".index");
 const againButton = document.body.querySelector(".again");
+const rCount = document.body.querySelector('.rCount');
+const wCount = document.body.querySelector('.wCount');
 
 let data = [...qData];
 let curQ = 0;
 let wrongAnswers = [];
+let rightAnswers = [];
 
 const indexUpdate = (index) => {
   indexContainer.textContent = `${index} / ${data.length}`;
@@ -78,10 +81,12 @@ const checkAnswerHandler = (evt) => {
     optionsContainer.firstChild.classList = "";
     if (optionsContainer.firstChild.firstChild.value === rAns[0]) {
       optionsContainer.firstChild.classList.add("right");
+      rCount.textContent = Number(rCount.textContent) + 1
     } else {
       optionsContainer.firstChild.classList.add("wrong");
       if (!wrongAnswers.includes(data[curQ][0])) {
         wrongAnswers.push(data[curQ][0]);
+        wCount.textContent = Number(wCount.textContent) + 1
       }
     }
     return;
@@ -96,11 +101,16 @@ const checkAnswerHandler = (evt) => {
       d.querySelector("span").classList.add("wrong");
       if (!wrongAnswers.includes(data[curQ][0])) {
         wrongAnswers.push(data[curQ][0]);
+        wCount.textContent = Number(wCount.textContent) + 1
       }
     }
   });
-  if (checked !== rAns.length && !wrongAnswers.includes(data[curQ][0])) {
+  if (checked !== 0 && checked !== rAns.length && !wrongAnswers.includes(data[curQ][0])) {
     wrongAnswers.push(data[curQ][0]);
+    wCount.textContent = Number(wCount.textContent) + 1
+  }
+  if (checked === rAns.length && !wrongAnswers.includes(data[curQ][0])) {
+    rCount.textContent = Number(rCount.textContent) + 1
   }
 };
 
@@ -131,6 +141,8 @@ const resetClick = (evt) => {
   curQ = 0;
   data = [...qData];
   wrongAnswers = [];
+  rCount.textContent = 0;
+  wCount.textContent = 0;
   indexUpdate(data[curQ][0]);
   setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
@@ -188,6 +200,9 @@ const againClickHandler = (evt) => {
   }
   data = data.filter((question) => wrongAnswers.includes(question[0]));
   curQ = 0;
+  rCount.textContent = 0;
+  wCount.textContent = 0;
+  wrongAnswers = [];
   indexUpdate(data[curQ][0]);
   setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
