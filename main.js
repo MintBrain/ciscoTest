@@ -14,7 +14,7 @@ const rCount = document.body.querySelector('.rCount');
 const wCount = document.body.querySelector('.wCount');
 
 let data = [...qData];
-let curQ = 3;
+let curQ = 0;
 let wrongAnswers = [];
 let rightAnswers = [];
 
