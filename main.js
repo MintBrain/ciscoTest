@@ -14,7 +14,7 @@ const rCount = document.body.querySelector('.rCount');
 const wCount = document.body.querySelector('.wCount');
 
 let data = [...qData];
-let curQ = 0;
+let curQ = 3;
 let wrongAnswers = [];
 let rightAnswers = [];
 
@@ -49,6 +49,7 @@ const setQuestion = (question, answers, correctAnswers) => {
     inputEl.placeholder = "Введи ответ";
     inputEl.name = "cisco";
     inputEl.classList = "text";
+    inputEl.autofocus = true;
     d.insertAdjacentElement("beforeend", inputEl);
 
     d.insertAdjacentHTML("beforeend", "<br>");
@@ -57,8 +58,13 @@ const setQuestion = (question, answers, correctAnswers) => {
     return;
   }
 
+  let i = 0;
   for (const answer of answers) {
+    i += 1;
     const d = document.createElement("div");
+    const optNumber = document.createElement('span');
+    optNumber.textContent = `${i}.`
+    d.insertAdjacentElement('beforeend', optNumber);
     let inputEl = document.createElement("input");
     inputEl.type = type;
     inputEl.value = answer;
@@ -67,6 +73,7 @@ const setQuestion = (question, answers, correctAnswers) => {
     d.insertAdjacentElement("beforeend", inputEl);
     let sp = document.createElement("span");
     sp.textContent = answer;
+    sp.id = 'ansText';
     d.insertAdjacentElement("beforeend", sp);
     d.insertAdjacentHTML("beforeend", "<br>");
     optionsContainer.insertAdjacentElement("beforeend", d);
@@ -81,25 +88,29 @@ const checkAnswerHandler = (evt) => {
     optionsContainer.firstChild.classList = "";
     if (optionsContainer.firstChild.firstChild.value === rAns[0]) {
       optionsContainer.firstChild.classList.add("right");
-      rCount.textContent = Number(rCount.textContent) + 1
+      if (!rightAnswers.includes(data[curQ][0]) && !wrongAnswers.includes(data[curQ][0])) {
+        rCount.textContent = Number(rCount.textContent) + 1;
+        rightAnswers.push(data[curQ][0]);
+      }
     } else {
       optionsContainer.firstChild.classList.add("wrong");
-      if (!wrongAnswers.includes(data[curQ][0])) {
+      if (!wrongAnswers.includes(data[curQ][0]) && !rightAnswers.includes(data[curQ][0])) {
         wrongAnswers.push(data[curQ][0]);
-        wCount.textContent = Number(wCount.textContent) + 1
+        wCount.textContent = Number(wCount.textContent) + 1;
       }
     }
     return;
   }
   let checked = 0;
   optionsContainer.querySelectorAll("div").forEach((d) => {
-    d.querySelector("span").classList = "";
-    if (rAns.includes(d.querySelector("span").textContent) && d.querySelector("input").checked) {
-      d.querySelector("span").classList.add("right");
+    const textEl = d.querySelector('#ansText');
+    textEl.classList = "";
+    if (rAns.includes(textEl.textContent) && d.querySelector("input").checked) {
+      textEl.classList.add("right");
       checked += 1;
-    } else if (!rAns.includes(d.querySelector("span").textContent) && d.querySelector("input").checked) {
-      d.querySelector("span").classList.add("wrong");
-      if (!wrongAnswers.includes(data[curQ][0])) {
+    } else if (!rAns.includes(textEl.textContent) && d.querySelector("input").checked) {
+      textEl.classList.add("wrong");
+      if (!rightAnswers.includes(data[curQ][0]) && !wrongAnswers.includes(data[curQ][0])) {
         wrongAnswers.push(data[curQ][0]);
         wCount.textContent = Number(wCount.textContent) + 1
       }
@@ -110,7 +121,10 @@ const checkAnswerHandler = (evt) => {
     wCount.textContent = Number(wCount.textContent) + 1
   }
   if (checked === rAns.length && !wrongAnswers.includes(data[curQ][0])) {
-    rCount.textContent = Number(rCount.textContent) + 1
+    if (!rightAnswers.includes(data[curQ][0])) {
+      rCount.textContent = Number(rCount.textContent) + 1;
+      rightAnswers.push(data[curQ][0]);
+    }
   }
 };
 
@@ -141,6 +155,7 @@ const resetClick = (evt) => {
   curQ = 0;
   data = [...qData];
   wrongAnswers = [];
+  rightAnswers = [];
   rCount.textContent = 0;
   wCount.textContent = 0;
   indexUpdate(data[curQ][0]);
@@ -203,13 +218,19 @@ const againClickHandler = (evt) => {
   rCount.textContent = 0;
   wCount.textContent = 0;
   wrongAnswers = [];
+  rightAnswers = [];
   indexUpdate(data[curQ][0]);
   setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
 
 const keydownHandler = (evt) => {
-  evt.preventDefault();
   const optCount = data[curQ][2].length;
+  if (evt.key >= '1' && evt.key <= String(optCount)) {
+    const optInput = document.querySelector(`.options :nth-child(${+evt.key}) input`);
+    optInput.checked = !optInput.checked;
+    evt.preventDefault();
+    return;
+  }
   switch (evt.key) {
     case 'ArrowRight':
       nextHandler(evt);
@@ -225,10 +246,10 @@ const keydownHandler = (evt) => {
       optionsContainer.querySelectorAll('input').forEach((el) => el.checked = false);
       checkAnswerHandler(evt);
       break;
-  }
-  if (evt.key >= '1' && evt.key <= String(optCount)) {
-    const optInput = document.querySelector(`.options :nth-child(${+evt.key}) input`);
-    optInput.checked = !optInput.checked;
+    default:
+      if (optionsContainer.querySelector('input').type === 'text') {
+        optionsContainer.querySelector('input').focus();
+      }
   }
 };
 
