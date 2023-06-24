@@ -10,19 +10,23 @@ const resetButton = document.body.querySelector(".reset");
 const randButton = document.body.querySelector(".random");
 const indexContainer = document.body.querySelector(".index");
 const againButton = document.body.querySelector(".again");
+const optShuffleCont = document.body.querySelector('.optShuffleDiv');
 const rCount = document.body.querySelector('.rCount');
 const wCount = document.body.querySelector('.wCount');
+const optShuffleCheckbox = optShuffleCont.querySelector('.optShuffle');
 
 let data = [...qData];
 let curQ = 0;
 let wrongAnswers = [];
 let rightAnswers = [];
 
+
 const indexUpdate = (index) => {
   indexContainer.textContent = `${index} / ${data.length}`;
 };
 
 const setQuestion = (question, answers, correctAnswers) => {
+  answers = [...answers];
   document.querySelector(".image").innerHTML = "";
   if (question.startsWith("TEMP=")) {
     let pic = question.slice(6, question.indexOf('"', 7));
@@ -59,6 +63,10 @@ const setQuestion = (question, answers, correctAnswers) => {
   }
 
   let i = 0;
+  if (optShuffleCheckbox.checked) {
+    answers = ShuffleArray(answers);  
+  }
+
   for (const answer of answers) {
     i += 1;
     const d = document.createElement("div");
@@ -174,11 +182,12 @@ const showClick = (evt) => {
   }
 
   optionsContainer.querySelectorAll("div").forEach((d) => {
-    d.querySelector("span").classList = "";
-    if (rAns.includes(d.querySelector("span").textContent)) {
+    const textEl = d.querySelector('#ansText');
+    textEl.classList = "";
+    if (rAns.includes(textEl.textContent)) {
       d.querySelector("input").checked = true;
-      d.querySelector("span").classList.add("right");
-    } else if (!rAns.includes(d.querySelector("span").textContent)) {
+      textEl.classList.add("right");
+    } else if (!rAns.includes(textEl.textContent)) {
       d.querySelector("input").checked = false;
     }
   });
@@ -263,6 +272,7 @@ nextButton.addEventListener("click", nextHandler);
 resetButton.addEventListener("click", resetClick);
 showButton.addEventListener("click", showClick);
 optionsContainer.addEventListener("click", onOptClick);
+optShuffleCont.addEventListener("click", onOptClick);
 randButton.addEventListener("click", randHandler);
 againButton.addEventListener("click", againClickHandler);
 document.addEventListener('keydown', keydownHandler);
