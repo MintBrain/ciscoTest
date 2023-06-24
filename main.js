@@ -207,6 +207,32 @@ const againClickHandler = (evt) => {
   setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 };
 
+const keydownHandler = (evt) => {
+  evt.preventDefault();
+  const optCount = data[curQ][2].length;
+  switch (evt.key) {
+    case 'ArrowRight':
+      nextHandler(evt);
+      break;
+    case 'ArrowLeft':
+      prevHandler(evt);
+      break;
+    case 'Enter':
+      checkAnswerHandler(evt);
+      break;
+    case 'Esc':
+    case 'Escape':
+      optionsContainer.querySelectorAll('input').forEach((el) => el.checked = false);
+      checkAnswerHandler(evt);
+      break;
+  }
+  if (evt.key >= '1' && evt.key <= String(optCount)) {
+    const optInput = document.querySelector(`.options :nth-child(${+evt.key}) input`);
+    optInput.checked = !optInput.checked;
+  }
+};
+
+
 indexUpdate(data[curQ][0]);
 setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 
@@ -218,3 +244,4 @@ showButton.addEventListener("click", showClick);
 optionsContainer.addEventListener("click", onOptClick);
 randButton.addEventListener("click", randHandler);
 againButton.addEventListener("click", againClickHandler);
+document.addEventListener('keydown', keydownHandler);
