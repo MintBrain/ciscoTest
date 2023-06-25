@@ -15,10 +15,11 @@ const rCount = document.body.querySelector('.rCount');
 const wCount = document.body.querySelector('.wCount');
 const optShuffleCheckbox = optShuffleCont.querySelector('.optShuffle');
 
-let data = [...qData];
 let curQ = 0;
 let wrongAnswers = [];
 let rightAnswers = [];
+let currentCookie = getCookie('knownAnswers');
+let data = [...qData].filter((el) => !currentCookie[el[0]] || currentCookie[el[0]] < 3);
 
 
 const indexUpdate = (index) => {
@@ -91,19 +92,22 @@ const setQuestion = (question, answers, correctAnswers) => {
 const checkAnswerHandler = (evt) => {
   evt.preventDefault();
   const rAns = data[curQ][2].filter((ans, i) => data[curQ][3].includes(i));
+  const questionId = data[curQ][0];
 
   if (optionsContainer.firstChild.firstChild.type === "text") {
     optionsContainer.firstChild.classList = "";
     if (optionsContainer.firstChild.firstChild.value === rAns[0]) {
       optionsContainer.firstChild.classList.add("right");
-      if (!rightAnswers.includes(data[curQ][0]) && !wrongAnswers.includes(data[curQ][0])) {
+      if (!rightAnswers.includes(questionId) && !wrongAnswers.includes(questionId)) {
+        currentCookie[questionId] = currentCookie[questionId] ? currentCookie[questionId] + 1: 1;
+        setCookie('knownAnswers', JSON.stringify({...currentCookie}));
         rCount.textContent = Number(rCount.textContent) + 1;
-        rightAnswers.push(data[curQ][0]);
+        rightAnswers.push(questionId);
       }
     } else {
       optionsContainer.firstChild.classList.add("wrong");
-      if (!wrongAnswers.includes(data[curQ][0]) && !rightAnswers.includes(data[curQ][0])) {
-        wrongAnswers.push(data[curQ][0]);
+      if (!wrongAnswers.includes(questionId) && !rightAnswers.includes(questionId)) {
+        wrongAnswers.push(questionId);
         wCount.textContent = Number(wCount.textContent) + 1;
       }
     }
@@ -118,20 +122,22 @@ const checkAnswerHandler = (evt) => {
       checked += 1;
     } else if (!rAns.includes(textEl.textContent) && d.querySelector("input").checked) {
       textEl.classList.add("wrong");
-      if (!rightAnswers.includes(data[curQ][0]) && !wrongAnswers.includes(data[curQ][0])) {
-        wrongAnswers.push(data[curQ][0]);
+      if (!rightAnswers.includes(questionId) && !wrongAnswers.includes(questionId)) {
+        wrongAnswers.push(questionId);
         wCount.textContent = Number(wCount.textContent) + 1
       }
     }
   });
-  if (checked !== 0 && checked !== rAns.length && !wrongAnswers.includes(data[curQ][0])) {
-    wrongAnswers.push(data[curQ][0]);
+  if (checked !== 0 && checked !== rAns.length && !wrongAnswers.includes(questionId)) {
+    wrongAnswers.push(questionId);
     wCount.textContent = Number(wCount.textContent) + 1
   }
-  if (checked === rAns.length && !wrongAnswers.includes(data[curQ][0])) {
-    if (!rightAnswers.includes(data[curQ][0])) {
+  if (checked === rAns.length && !wrongAnswers.includes(questionId)) {
+    if (!rightAnswers.includes(questionId)) {
+      currentCookie[questionId] = currentCookie[questionId] ? currentCookie[questionId] + 1: 1;
+      setCookie('knownAnswers', JSON.stringify({...currentCookie}));
       rCount.textContent = Number(rCount.textContent) + 1;
-      rightAnswers.push(data[curQ][0]);
+      rightAnswers.push(questionId);
     }
   }
 };
@@ -161,7 +167,7 @@ const nextHandler = (evt) => {
 const resetClick = (evt) => {
   evt.preventDefault();
   curQ = 0;
-  data = [...qData];
+  data = [...qData].filter((el) => !currentCookie[el[0]] || currentCookie[el[0]] < 3);
   wrongAnswers = [];
   rightAnswers = [];
   rCount.textContent = 0;
@@ -207,6 +213,41 @@ function ShuffleArray(array) {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
+}
+
+function getCookie(name) {
+  var obj = {};
+  var cookies = document.cookie.split(/; /);
+  for (var i = 0, len = cookies.length; i < len; i++) {
+    var cookie = cookies[i].split(/=/);
+    obj[cookie[0]] = cookie[1];
+  }
+  return obj[name] ? JSON.parse(decodeURIComponent(obj[name])) : {};
+}
+
+function setCookie(name, value, options = {}) {
+
+  options = {
+    path: '/',
+    'max-age': 2505600,
+    ...options
+  };
+
+  if (options.expires instanceof Date) {
+    options.expires = options.expires.toUTCString();
+  }
+
+  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+  for (let optionKey in options) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
 }
 
 const randHandler = (evt) => {
