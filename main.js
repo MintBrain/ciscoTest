@@ -14,12 +14,27 @@ const optShuffleCont = document.body.querySelector('.optShuffleDiv');
 const rCount = document.body.querySelector('.rCount');
 const wCount = document.body.querySelector('.wCount');
 const optShuffleCheckbox = optShuffleCont.querySelector('.optShuffle');
+const cookieContainer = document.body.querySelector('.cookieDiv');
+const cookieCheckbox = cookieContainer.querySelector('.cookieDisable');
+
 
 let curQ = 0;
 let wrongAnswers = [];
 let rightAnswers = [];
 let currentCookie = getCookie('knownAnswers');
-let data = [...qData].filter((el) => !currentCookie[el[0]] || currentCookie[el[0]] < 3);
+currentCookie = currentCookie ? JSON.parse(currentCookie) : {};
+let data = [...qData];
+cookieCheckbox.checked = Boolean(eval(getCookie('cookieCheckbox')));
+
+/* if (getCookie('cookieCheckbox')) {
+  cookieCheckbox.checked = getCookie('cookieCheckbox');
+} else {
+  setCookie('cookieCheckbox', false);
+} */
+
+if (cookieCheckbox.checked) {
+  data = data.filter((el) => !currentCookie[el[0]] || currentCookie[el[0]] < 3);
+}
 
 
 const indexUpdate = (index) => {
@@ -167,7 +182,10 @@ const nextHandler = (evt) => {
 const resetClick = (evt) => {
   evt.preventDefault();
   curQ = 0;
-  data = [...qData].filter((el) => !currentCookie[el[0]] || currentCookie[el[0]] < 3);
+  data = [...qData];
+  if (cookieCheckbox.checked) {
+    data = data.filter((el) => !currentCookie[el[0]] || currentCookie[el[0]] < 3);
+  }
   wrongAnswers = [];
   rightAnswers = [];
   rCount.textContent = 0;
@@ -222,7 +240,7 @@ function getCookie(name) {
     var cookie = cookies[i].split(/=/);
     obj[cookie[0]] = cookie[1];
   }
-  return obj[name] ? JSON.parse(decodeURIComponent(obj[name])) : {};
+  return obj[name] ? decodeURIComponent(obj[name]) : undefined;
 }
 
 function setCookie(name, value, options = {}) {
@@ -303,7 +321,6 @@ const keydownHandler = (evt) => {
   }
 };
 
-
 indexUpdate(data[curQ][0]);
 setQuestion(data[curQ][1], data[curQ][2], data[curQ][3]);
 
@@ -314,6 +331,15 @@ resetButton.addEventListener("click", resetClick);
 showButton.addEventListener("click", showClick);
 optionsContainer.addEventListener("click", onOptClick);
 optShuffleCont.addEventListener("click", onOptClick);
+cookieContainer.addEventListener('click', (evt) => {
+  if (evt.tagName === "INPUT") {
+    setCookie('cookieCheckbox', evt.target.checked);
+    return;
+  } else {
+    onOptClick(evt);
+    setCookie('cookieCheckbox', evt.target.previousElementSibling.checked);
+  }
+});
 randButton.addEventListener("click", randHandler);
 againButton.addEventListener("click", againClickHandler);
 document.addEventListener('keydown', keydownHandler);
