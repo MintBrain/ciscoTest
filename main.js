@@ -18,7 +18,7 @@ const cookieContainer = document.body.querySelector('.cookieDiv');
 const cookieCheckbox = cookieContainer.querySelector('.cookieDisable');
 
 
-let curQ = 0;
+let curQ = 132;
 let wrongAnswers = [];
 let rightAnswers = [];
 let currentCookie = getCookie('knownAnswers');
@@ -293,7 +293,7 @@ const againClickHandler = (evt) => {
 
 const keydownHandler = (evt) => {
   const optCount = data[curQ][2].length;
-  if (evt.key >= '1' && evt.key <= String(optCount)) {
+  if (evt.key >= '1' && evt.key <= String(optCount) && evt.target.type !== 'text') {
     const optInput = document.querySelector(`.options :nth-child(${+evt.key}) input`);
     optInput.checked = !optInput.checked;
     evt.preventDefault();
