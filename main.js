@@ -332,7 +332,7 @@ showButton.addEventListener("click", showClick);
 optionsContainer.addEventListener("click", onOptClick);
 optShuffleCont.addEventListener("click", onOptClick);
 cookieContainer.addEventListener('click', (evt) => {
-  if (evt.tagName === "INPUT") {
+  if (evt.target.tagName === "INPUT") {
     setCookie('cookieCheckbox', evt.target.checked);
     return;
   } else {
