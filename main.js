@@ -18,7 +18,7 @@ const cookieContainer = document.body.querySelector('.cookieDiv');
 const cookieCheckbox = cookieContainer.querySelector('.cookieDisable');
 
 
-let curQ = 132;
+let curQ = 0;
 let wrongAnswers = [];
 let rightAnswers = [];
 let currentCookie = getCookie('knownAnswers');
